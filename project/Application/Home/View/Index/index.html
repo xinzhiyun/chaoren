@@ -205,13 +205,15 @@
 					<div class="waterval" >
 						<div>纯水TDS</div>
 						<b id="rawtdsVal">
-							0<span>ppm</span>
+							<a href='javascript:;'>0</a>
+							<span>ppm</span>
 						</b>
 					</div>
 					<div class="waterval">
 						<div>原水TDS</div>
 						<b id="puretdsVal">
-							0<span>ppm</span>
+							<a href='javascript:;'>0</a>
+							<span>ppm</span>
 						</b>
 					</div>
 				</div>
@@ -396,8 +398,8 @@
 			var renumberFlow=parseInt(data.sumpump*pumpSpend);//剩余流量
 			var renumberDay=parseInt(data.reday);//剩余天数
 			// console.log(usednumberFlow);
-			$("#puretdsVal").html((data.rawtds?data.rawtds:'0') + '<span>ppm</span>');
-			$("#rawtdsVal").html((data.puretds?data.puretds:'0') + '<span>ppm</span>');
+			$("#puretdsVal>a").html((data.rawtds?data.rawtds:'0'));
+			$("#rawtdsVal>a").html((data.puretds?data.puretds:'0'));
 			// $(".textLeft").html("<p id='surplusVal'><span>剩余天数</span><b>"+(data.reday?data.reday:'0')+"天</b></p>");
 			// $(".textRight").html("<p id='alreadyUsedVal'><span>已用天数</span><b>"+(usednumberFlow?usednumberFlow:'0')+"天</b></p>");
 			//1.设备状态页面数据显示
@@ -465,8 +467,8 @@
 					var usedDay=parseInt(dataList.SumDay);
 
 					//1.设备状态页面数据显示
-					$("#rawtdsVal").text((dataList.PureTDS?dataList.PureTDS:'0') + '<span>ppm</span>');//设置当前设备原水值
-					$("#puretdsVal").text((dataList.RawTDS?dataList.RawTDS:'0') + '<span>ppm</span>');//设置当前设备纯水值
+					$("#rawtdsVal>a").text((dataList.PureTDS?dataList.PureTDS:'0'));//设置当前设备原水值
+					$("#puretdsVal>a").text((dataList.RawTDS?dataList.RawTDS:'0'));//设置当前设备纯水值
 					if(leasingmode=="0"){//零售
 						$(".textLeft").html("<p id='surplusVal'><span>已用</span><b>"+(usedFlow?usedFlow:'0')+"</b><span>L</span></p>");
 						$(".textRight").html("<p id='alreadyUsedVal'><span>已用</span><b>"+(usedDay?usedDay:'0')+"</b><span>天</span></p>");

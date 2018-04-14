@@ -23,7 +23,7 @@ class SetmealController extends CommonController
          */
         require_once VENDOR_PATH.'PHPExcel.php';
         $phpExcel = new \PHPExcel();
-        // dump($phpExcel);
+//         dump($_POST);
         // 搜索功能
         $map = array(
             'typename' => trim(I('post.typename')),
@@ -34,21 +34,21 @@ class SetmealController extends CommonController
         if (trim(I('post.describe'))) {
             $map['pub_setmeal.describe'] =  array('like','%'.trim(I('post.describe')).'%');
         }
-        $minmoney = trim(I('post.minmoney'))?:0;
-        $maxmoney = trim(I('post.maxmoney'))?:-1;
+        $minmoney = trim(I('post.minmoney'))?:false;
+        $maxmoney = trim(I('post.maxmoney'))?:false;
         if (is_numeric($maxmoney)) {
-            $map['pub_setmeal.money'] = array(array('egt',$minmoney*100),array('elt',$maxmoney*100));
+            $map['pub_setmeal.money'][] = array('elt',$maxmoney*100);
         }
-        if ($maxmoney < 0) {
-            $map['pub_setmeal.money'] = array(array('egt',$minmoney*100));
+        if (is_numeric($minmoney)) {
+            $map['pub_setmeal.money'][] = array('egt',$minmoney*100);
         }
-         $minaddtime = strtotime(trim(I('post.minaddtime')))?:0;
-         $maxaddtime = strtotime(trim(I('post.maxaddtime')))?:-1;
+         $minaddtime = strtotime(trim(I('post.mintime')))?:false;
+         $maxaddtime = strtotime(trim(I('post.maxtime')))?:false;
          if (is_numeric($maxaddtime)) {
-             $map['pub_setmeal.addtime'] = array(array('egt',$minaddtime),array('elt',$maxaddtime));
+             $map['pub_setmeal.addtime'][] = array('elt',$maxaddtime);
          }
-         if ($maxaddtime < 0) {
-             $map['pub_setmeal.addtime'] = array(array('egt',$minaddtime));
+         if (is_numeric($minaddtime)) {
+             $map['pub_setmeal.addtime'][] = array('egt',$minaddtime);
          }
         // 删除数组中为空的值
         $map = array_filter($map, function ($v) {
@@ -63,29 +63,31 @@ class SetmealController extends CommonController
         if (I('output') == 1) {
             $data = $type->where($map)
                     ->join('pub_device_type ON pub_setmeal.tid = pub_device_type.id')
-                    ->field('pub_setmeal.id,remodel,money,flow,describe,pub_device_type.typename,pub_setmeal.addtime')
+                    ->field('pub_setmeal.id,pub_device_type.typename,remodel,money,flow,describe,pub_setmeal.addtime')
+                    ->order('pub_setmeal.addtime desc')
                     ->select();
             $filename = '套餐列表';
             $title = '套餐列表';
-            $cellName = ['id','充值模式','套餐金额','套餐流量/时长','套餐描述','设备','添加时间'];
+            $cellName = ['id','产品类型','充值模式','套餐金额','套餐量(天)','套餐描述','创建时间'];
 
             // 数组中枚举数值替换
             $arr = [
-                'addtime'=>'Y-m-d H:i:s',
+                'addtime'=>['date','Y-m-d H:i:s'],
                 'remodel'=>[
                     '0'=>'流量',
                     '1'=>'时长'
-                ]
+                ],
+                'money'=>['price']
             ];
-            replace_value($data,$arr);
+            $data = replace_array_value($data,$arr);
 
             // dump($data);die;
             $myexcel = new \Org\Util\MYExcel($filename,$title,$cellName,$data);
             $myexcel->output();
             return ;
         }
-
-        $total =$type->where($map)
+//        dump($map);
+     $total =$type->where($map)
                     ->join('pub_device_type ON pub_setmeal.tid = pub_device_type.id')
                     ->field('pub_setmeal.*,pub_device_type.typename')
                     ->count();

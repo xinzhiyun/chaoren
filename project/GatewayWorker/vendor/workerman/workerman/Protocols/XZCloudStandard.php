@@ -423,15 +423,7 @@ class XZCloudStandard
                         }
                         else if($cmd[$j][1]=='N')
                         {
-                             // $dataNum=0xffffffff;
-                            if($cmd[$j][0]=='SumPump')
-                            {
-                             $dataNum=0xffff;
-                            }
-                            else
-                            {
                              $dataNum=0xffffffff;
-                            }
                         }
                     }
                     if($cmd[$j][1]=='C')

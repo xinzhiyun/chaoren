@@ -118,25 +118,56 @@ class WechatController extends Controller
         $access_token = $wxJSSDK->getAccessToken();
 
 
+
+
         $jsonmenu = '{
-            "button":[{
-                "name":"代缴费",
-                "type":"view",
-                
-                "url":"http://pub.dianqiukj.com/home/shop/topup"
-            }],
-            "button":[{
-                "name":"安装人员",
-                "type":"view",
-                
-                "url":"http://pub.dianqiukj.com/home/users/login.html"
-            }],
-            "button":[{
-                "name":"我的水机",
-                "type":"view",
-                
-                "url":"http://pub.dianqiukj.com/"
-            }]
+            "button":[
+                {    
+                  "name":"设备管理",
+                  "sub_button":[
+                        {
+                           "type":"view",
+                           "name":"我的水机",
+                           "url":"http://chaorenwater.dianqiukj.com/"
+                        },
+                        {
+                           "type":"view",
+                           "name":"安装人员",
+                           "url":"http://chaorenwater.dianqiukj.com/home/users/login.html"
+                        },
+                        {
+                           "type":"view",
+                           "name":"代缴费",
+                           "url":"http://chaorenwater.dianqiukj.com/home/shop/topup"
+                        }
+                    ]
+                },
+                {
+                   "name":"关于超人",
+                   "sub_button":[
+                       {    
+                           "type":"view",
+                           "name":"超人官网",
+                           "url":"http://www.china-chaoren.com.cn/phone"
+                        },
+                        {    
+                           "type":"view",
+                           "name":"新闻动态",
+                           "url":"http://www.china-chaoren.com.cn/phone/news/index/id/59.html"
+                        },
+                        {
+                           "type":"view",
+                           "name":"公益超人",
+                           "url":"http://mp.weixin.qq.com/s/uzdQOvzLx7LxIBg5u3zaWA"
+                        },
+                        {
+                           "type":"view",
+                           "name":"加入我们",
+                           "url":"http://mp.weixin.qq.com/s/azC2ywNI1LnVZsPWbwrZ-Q"
+                        }
+                    ]
+               }
+           ]
         }';
 
 

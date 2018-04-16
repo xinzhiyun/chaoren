@@ -1,6 +1,5 @@
 <?php
 namespace Api\Controller;
-use Admin\Controller\CommonController;
 use Think\Controller;
 
 /**

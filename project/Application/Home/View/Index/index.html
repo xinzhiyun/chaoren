@@ -344,29 +344,7 @@
 			console.log(data);
 			//netstause:  0: 断开， 1：连接中
 			if(data.netstause == 1){	// 连接
-				// 颜色滚动条动画
-				var w = $('.zh-circle').clientWidth;
-				var h = $('.zh-circle').clientHeight;
-				var colorlen = 0;
-				var len = 14;		//滚动的长度(有颜色)
-			    colorint = setInterval(function(){
-			    	$('.circleli').eq(colorlen).css({
-			    		width: '3px',
-			    		background: '-webkit-linear-gradient(aqua,yellow,#1e9fff)',
-			    		transformOrigin: w/2 + 'px ' + h/2 + 'px'
-			    	})
-			    	colorlen++;
-			    	if(colorlen >= len){
-		    			$('.circleli').eq(colorlen-len).css({
-		    				width: '1px',
-		    				background: '#fff',
-		    			})
-		    			
-			    	}
-			    	if(colorlen >= $('.circleli').length+len){
-			    		colorlen = 0;
-			    	}
-			    },40);
+				round();
 				machineStatus();	//执行水机状态方法
 		    
 			}else if(data.netstause == 0){		
@@ -632,15 +610,20 @@
 							type:type
 						});
 						identify=1;
+						clearTimeout(colorint);
+						round();
 						setTimeout(function(){
 							if(identify==1){
 								layui.use('layer', function(){
 									var layer = layui.layer;
 									// layer.msg('操作超时！');
 									if($(".switchText").html=='开机中'){
-										$(".switchText").html('开机')
+										$(".switchText").html('开机');
+										location.reload();
+
 									}else if($('.switchText').html()=='关机中'){
 										$('.switchText').html('关机');
+										location.reload();
 									}
 
 								});
@@ -658,7 +641,31 @@
 		//页面加载时执行结束
 	</script>
 	<script>
-		
+		function round(){
+			// 颜色滚动条动画
+			var w = $('.zh-circle').clientWidth;
+			var h = $('.zh-circle').clientHeight;
+			var colorlen = 0;
+			var len = 14;		//滚动的长度(有颜色)
+		    colorint = setInterval(function(){
+		    	$('.circleli').eq(colorlen).css({
+		    		width: '3px',
+		    		background: '-webkit-linear-gradient(aqua,yellow,#1e9fff)',
+		    		transformOrigin: w/2 + 'px ' + h/2 + 'px'
+		    	})
+		    	colorlen++;
+		    	if(colorlen >= len){
+	    			$('.circleli').eq(colorlen-len).css({
+	    				width: '1px',
+	    				background: '#fff',
+	    			})
+	    			
+		    	}
+		    	if(colorlen >= $('.circleli').length+len){
+		    		colorlen = 0;
+		    	}
+		    },40);
+		}
 		//制水
 		function addwater(){
 			$(".switchText").html("关机");

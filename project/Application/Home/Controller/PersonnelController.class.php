@@ -121,9 +121,9 @@ class PersonnelController extends Controller
             //查询产品类型
             $type_info = M('devices')->field('type_id')->where(['device_code'=>$data['dcode']])->find();
             $status_info = M('devices_statu')->field('AliveStause,id')->where(['DeviceID'=>$data['dcode']])->find();
-            if ($status_info['alivestause'] == 1) {
-                $this->error('此设备正常 无需安装');
-            }
+//            if ($status_info['alivestause'] == 1) {
+//                $this->error('此设备正常 无需安装');
+//            }
 
             //查找产品对应的滤芯
             $type_name = M('device_type')->where(['id'=>$type_info['type_id']])->find();
@@ -191,7 +191,7 @@ class PersonnelController extends Controller
 //                    $status_info = M('devices_statu')->where(['DeviceID'=>$data['dcode']])->save(['ReFlow'=>0,'Reday'=>0,'LeasingMode'=>$data['lease']
 //                    ,'FilterMode'=>$data['filter'],'SumFlow'=>0,'SumDay'=>0,'AliveStause'=>1,'updatetime'=>time()]);
 
-                    $statu['DeviceID'] = $data['dcode'];
+                    $statu['DeviceID'] = trim($data['dcode']);
                     $statu['PackType'] = 'SetData';
 //                    $statu['ReFlow'] = 0;
 //                    $statu['Reday'] = 0;
@@ -202,7 +202,7 @@ class PersonnelController extends Controller
                     $statu['AliveStause'] = 1;
                     $statu['FilerNum'] = count($res);
                     $message['PackNum'] = 6;//激活
-                    // $sc = A('Api/Action');
+                     $sc = A('Api/Action');
 //                    $status = $sc->Initialize($data['dcode']);
 //                    $sta = Gateway::sendToUid('868575025659121',$status);
 //                    if ($status) {
@@ -219,7 +219,8 @@ class PersonnelController extends Controller
 //                    }
 //                    $status_info = M('devices_statu')->add();
                         M('devices_statu')->where(['DeviceID'=>$data['dcode']])->save(['data_statu'=>2]);
-                        Gateway::sendToUid($data['dcode'], $statu);
+                        $sc->sendMsg($statu);
+//                        Gateway::sendToUid($data['dcode'], $statu);
                         $this->success('安装成功',U('home/Personnel/personal'),2);
 
 

@@ -56,9 +56,9 @@ class PersonnelModel extends Model
         if (empty($binding_info)) {
             return ['code'=>403,'message'=>'该设备号码有误'];
         } else {
-            if($info['v_id']!=$binding_info['vid']){
-                return ['code'=>403,'message'=>'经销商信息错误'];
-            }
+//            if($info['v_id']!=$binding_info['vid']){
+//                return ['code'=>403,'message'=>'经销商信息错误'];
+//            }
             return ['code'=>200,'data'=>$binding_info['vid']];
         }
 

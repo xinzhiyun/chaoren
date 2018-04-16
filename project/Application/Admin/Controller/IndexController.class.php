@@ -41,7 +41,7 @@ class IndexController extends CommonController {
                 $order_filter['total'] = count($order_filters);
 
                 // 保修数量统计->保修列表
-                $repairs['total'] = D('Repair')->count();
+                $repairs['total'] = D('Repair')->where('status=0')->count();
 
                 // 建议数量统计->建议列表
                 $feeds['total'] = D('Feeds')->count();

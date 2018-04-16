@@ -1,6 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Think\Log;
 use \Org\Util\WeixinJssdk;
 use Org\Util\Gateway;
 /**
@@ -146,9 +147,12 @@ class PersonnelController extends Controller
                 if ( $add_info) {
                     if ( $map['lease']==2 ) {
                         $statu['Reday'] = 365;
-                        $device_status['reday']=365;
+                        $device_status['ReDay']=365;
                     }
+
+
                     $device_status['AliveStause']=1;
+                    $device_status['data_statu']=2;
 
                     $device_status['DeviceID'] = $data['dcode'];
                     $device_status['LeasingMode'] = $data['lease'];
@@ -167,6 +171,7 @@ class PersonnelController extends Controller
 
 //                        M('devices_statu')->where(['DeviceID'=>$data['dcode']])->save($statu);
                     }
+                    Log::write(json_encode($device_status), '安装');
 
                     if(!empty($status_info['id'])){
                         M('devices_statu')->where('id='.$status_info['id'])->save($device_status);

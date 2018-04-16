@@ -258,7 +258,9 @@ class ProductController extends CommonController
         D('devices')->getPageConfig($page);
         $pageButton =$page->show();
 
-        $filterlist = $filter->where($map)->limit($page->firstRow.','.$page->listRows)->select();
+        $filterlist = $filter->where($map)->limit($page->firstRow.','.$page->listRows)
+            ->order('addtime desc')
+            ->select();
 
         $this->assign('list',$filterlist);
         $this->assign('button',$pageButton);

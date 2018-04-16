@@ -23,6 +23,8 @@ class IndexController extends CommonController
 	        	->join('pub_devices_statu ON pub_devices_statu.DeviceID=pub_devices.device_code')
 	        	->field('RawTDS,PureTDS,ReFlow,SumFlow')
 	        	->find();
+                
+                if(empty($deviceInfo)){ $this->redirect('/Home/Devices/manage'); }
                 // 滤芯详情
                 $code = M('devices')->where("id={$_SESSION['homeuser']['did']}")->find();
 

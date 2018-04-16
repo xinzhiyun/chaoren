@@ -49,11 +49,16 @@ class PersonnelModel extends Model
 
         $list = M('devices')->field('id')->where($where)->find();
         // echo M('devices')->getlastsql();exit;
-        $binding_info = M('binding')->where(['did'=>$list['id'],'vid'=>$info['v_id']])->find();
+        $binding_info = M('binding')->where(['did'=>$list['id']])->find();
         // echo M('binding')->getlastsql();exit;
+        // ,'vid'=>$info['v_id']
+        // 
         if (empty($binding_info)) {
             return ['code'=>403,'message'=>'该设备号码有误'];
         } else {
+            if($info['v_id']!=$binding_info['vid']){
+                return ['code'=>403,'message'=>'经销商信息错误'];
+            }
             return ['code'=>200,'data'=>$binding_info['vid']];
         }
 

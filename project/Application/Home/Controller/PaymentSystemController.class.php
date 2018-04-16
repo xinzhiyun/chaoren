@@ -791,7 +791,7 @@ class PaymentSystemController extends Controller
         //$input->SetGoods_tag($uid);
         // 支付成功的回调地址
         //$input->SetNotify_url("http://xinpin.dianqiukj.com/index.php/Home/Weixinpay/notify.html");
-        $input->SetNotify_url('http://pub.dianqiukj.com/index.php/Home/PaymentSystem/notify');
+        $input->SetNotify_url('http://chaorenwater.dianqiukj.com/index.php/Home/PaymentSystem/notify');
         // 支付方式 JS-SDK 类型是：JSAPI
         $input->SetTrade_type("JSAPI");
         // 用户在公众号的唯一标识
@@ -913,7 +913,7 @@ class PaymentSystemController extends Controller
         if($xml){
             //解析微信返回数据数组格式
             $result = $this->notifyData($xml);
-
+            Log::write(json_encode($result), '微信回调');
             //$uid = M('Users')->where("open_id='{$result['']}'")->find()['id'];
             //file_put_contents('./wx_pay1.txt',$xml."\r\n", FILE_APPEND);
             // 如果订单号不为空
@@ -1186,7 +1186,7 @@ class PaymentSystemController extends Controller
         //签名步骤二：在string后加入KEY
         $config=$this->config;
 //        $string_sign_temp=$string_a."&key=CAA5EAE2CE5AC44A3F8930E6F127B423";
-        $string_sign_temp=$string_a."&key=".\WxPayConfig::KEY;
+        $string_sign_temp=$string_a."&key=36d04a9d74392c727b1a9bf97a7bcbac";
         //签名步骤三：MD5加密
         $sign = md5($string_sign_temp);
         // 签名步骤四：所有字符转为大写

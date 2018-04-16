@@ -62,16 +62,15 @@ class WorkController extends CommonController
         });
 
         if($this->get_level()){
-            $map['pub_binding.vid'] = $_SESSION['adminuser']['id'];
-
+            $map['pub_personnel.v_id'] = $_SESSION['adminuser']['id'];
         }
         $type = D('work');
         // PHPExcel 导出数据
         if (I('output') == 1) {
             $data = $type->where($map)
                 ->alias('w')
-                ->join('pub_devices ON w.device_code = pub_devices.device_code','LEFT')
-                ->join('pub_binding ON pub_devices.id = pub_binding.did ','LEFT')
+                // ->join('pub_devices ON w.device_code = pub_devices.device_code','LEFT')
+                // ->join('pub_binding ON pub_devices.id = pub_binding.did ','LEFT')
                 ->join('pub_personnel ON w.personnel_id = pub_personnel.id ','LEFT')
                 ->join('pub_repair ON w.repair_id = pub_repair.id ','LEFT')
                 ->field('w.number,pub_personnel.name,pub_personnel.phone,w.type,w.content,w.address,w.result,w.create_at,w.time,pub_repair.address raddress,w.province,w.city,w.district')
@@ -110,15 +109,18 @@ class WorkController extends CommonController
         $page  = new \Think\Page($total,8);
         $pageButton =$page->show();
         // echo M()->getLastSql();
+
         $data = $type->where($map)
             ->alias('w')
-            ->join('pub_devices ON w.device_code= pub_devices.device_code','LEFT')
-            ->join('pub_binding ON pub_devices.id = pub_binding.did ','LEFT')
+            // ->join('pub_devices ON w.device_code= pub_devices.device_code','LEFT')
+            // ->join('pub_binding ON pub_devices.id = pub_binding.did ','LEFT')
             ->join('pub_personnel ON w.personnel_id = pub_personnel.id ','LEFT')
             ->join('pub_repair ON w.repair_id = pub_repair.id ','LEFT')
-            ->field('pub_devices.*,pub_binding.*,w.*,pub_personnel.name pname,pub_personnel.phone pphone,pub_repair.address raddress')
+            ->field('w.*,pub_personnel.name pname,pub_personnel.phone pphone,pub_repair.address raddress')
             ->order('w.result asc,w.create_at desc')
             ->limit($page->firstRow.','.$page->listRows)->getAll();
+
+            // dump($list);
         //exit();
         $this->assign('list',$data);
         $this->assign('button',$pageButton);

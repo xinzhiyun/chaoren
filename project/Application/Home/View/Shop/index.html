@@ -471,8 +471,8 @@
 					'getBrandWCPayRequest',
 					JSON.parse(res),
 					function(res){
-								WeixinJSBridge.log(res.err_msg);
-								alert(res.err_code+res.err_desc+res.err_msg);
+								// WeixinJSBridge.log(res.err_msg);
+								// alert(res.err_code+res.err_desc+res.err_msg);
 						if (res.err_msg.substr(-2) == 'ok') {
 	                        // if(leaseMode=="1") {//按流量计费
 	                        //     ajson["ReFlow"]=flowNum;

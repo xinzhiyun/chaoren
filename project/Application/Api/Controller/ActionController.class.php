@@ -14,6 +14,7 @@ class ActionController extends Controller
 
     public function test()
     {
+        // $this->devices_init('868575025673882');
 //
 //        $message['DeviceID'] = '868575025672249';
 //        $message['PackType'] = "SetData";
@@ -435,35 +436,47 @@ class ActionController extends Controller
 
 
     /**
-     * 设备初始化  (待完善)
+     * 设备解绑 初始化
      * @param  [type] $dcode [description]
      * @return [type] [description]
      *
      * @Author 李振东 lzdong@foxmail.com 2018-04-02
      */
-    public function devices_init($dcode,$data)
+    public function devices_init($dcode)
     {
         $message['DeviceID'] = $dcode;
         $message['PackType'] = "SetData";
         $message['Vison']    = 0;
-        $message['PackNum']  = 6;
+        // $message['PackNum']  = 6;
 
         $filter =  $this->get_filter_info($dcode);
-        foreach ($filter as $key =>$value) {
-            $i =$key+1;
-            $sdata[ 'ReFlowFilter'.$i]      =$value['flowlife'];
-            $sdata[ 'FlowLifeFilter'.$i]    =$value['flowlife'];
+        if(empty($filter)){
+            $filter_arr=['1'=>'90','2'=>'90','3'=>'90','4'=>'365','5'=>'90'];
+            for ($i = 1; $i < 6; $i++) {
+                $sdata[ 'ReFlowFilter'.$i]      =$value['flowlife'];
+                $sdata[ 'FlowLifeFilter'.$i]    =$value['flowlife'];
 
-            $sdata[ 'ReDayFilter'.$i]       =$value['timelife'];
-            $sdata[ 'DayLifeFiter'.$i]      =$value['timelife'];
+                $sdata[ 'ReDayFilter'.$i]       =$filter_arr[$i];
+                $sdata[ 'DayLifeFiter'.$i]      =$filter_arr[$i];
+            }
+        }else{
+            foreach ($filter as $key =>$value) {
+                $i =$key+1;
+                $sdata[ 'ReFlowFilter'.$i]      =$value['flowlife'];
+                $sdata[ 'FlowLifeFilter'.$i]    =$value['flowlife'];
+
+                $sdata[ 'ReDayFilter'.$i]       =$value['timelife'];
+                $sdata[ 'DayLifeFiter'.$i]      =$value['timelife'];
+            }
         }
 
-//        $sdata['ReDay']     = '3';
+        $sdata['ReDay']     = '0';
+        $sdata['Reday']     = '0';
         $sdata['SumDay']    = 0;
-        $sdata['AliveStause']=1;
+        $sdata['AliveStause']=0;
         $sdata['FilterMode']=0;
         $sdata['LeasingMode']=2;
-        $sdata['data_statu']=2;
+        $sdata['data_statu']=0;
 
         $message = array_merge($message,$sdata);
 
@@ -477,14 +490,6 @@ class ActionController extends Controller
         $this->sendMsg($message);
     }
 
-//    public function updateNetStase($DeviceID,$NetStause)
-//    {
-//        $status_id = M('devices_statu')->where("DeviceID=" . $DeviceID)->getField('id');
-//
-//        $data = [
-//            'NetStause'   => $NetStause,
-//        ];
-//        $this->updateData($status_id, $data);
-//    }
+
 
 }

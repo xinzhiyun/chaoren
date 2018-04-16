@@ -381,10 +381,6 @@ html{
 #puretdsVal {
 	position: relative;
 }
-#rawtdsVal>a,
-#puretdsVal>a {
-	color: rgb(242,162,22);
-}
 #rawtdsVal>span {
 	position: absolute;
 	left: 102%;

@@ -416,6 +416,7 @@ class UsersController extends CommonController
         // 设备状态判断回滚
         if($device_status && $orders_status){
             $device->commit();
+            A('Api/action')->devices_init($code['device_code']);
             $this->ajaxReturn(['code'=>200,'msg'=>'解绑成功']);
         } else {
             $device->rollback();

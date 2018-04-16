@@ -91,6 +91,7 @@ class PersonnelController extends Controller
     public function infoDetail($id)
     {
         $map = I('post.');
+
         $map['personnel_id'] = session('pid');
         $map['id'] = $id;
         $perSonnel_info = D('Personnel');
@@ -106,7 +107,6 @@ class PersonnelController extends Controller
 
         if (IS_POST) {
             //查询数据
-
             $status = $perSonnel_info->status($map);
             if ($status['code']==403) {
                 $this->error($status['message']);
@@ -120,7 +120,7 @@ class PersonnelController extends Controller
             $data['create_time'] = date('Y-m-d H:i:s');
             //查询产品类型
             $type_info = M('devices')->field('type_id')->where(['device_code'=>$data['dcode']])->find();
-            $status_info = M('devices_statu')->field('AliveStause')->where(['DeviceID'=>$data['dcode']])->find();
+            $status_info = M('devices_statu')->field('AliveStause,id')->where(['DeviceID'=>$data['dcode']])->find();
             if ($status_info['alivestause'] == 1) {
                 $this->error('此设备正常 无需安装');
             }
@@ -144,6 +144,12 @@ class PersonnelController extends Controller
                 $add_info = M('install')->add($data);
 
                 if ( $add_info) {
+                    if ( $map['lease']==2 ) {
+                        $statu['Reday'] = 365;
+                        $device_status['reday']=365;
+                    }
+                    $device_status['AliveStause']=1;
+
                     $device_status['DeviceID'] = $data['dcode'];
                     $device_status['LeasingMode'] = $data['lease'];
                     $device_status['FilterMode'] = $data['filter'];
@@ -162,8 +168,12 @@ class PersonnelController extends Controller
 //                        M('devices_statu')->where(['DeviceID'=>$data['dcode']])->save($statu);
                     }
 
+                    if(!empty($status_info['id'])){
+                        M('devices_statu')->where('id='.$status_info['id'])->save($device_status);
+                    }else{
+                        M('devices_statu')->add($device_status);
+                    }
 
-                    M('devices_statu')->add($device_status);
                     M('devices')->where(['device_code'=>$data['dcode']])->save(['device_statu'=>2]);
                     $num = 1;
                     $co  = 1;
@@ -180,6 +190,7 @@ class PersonnelController extends Controller
 
 //                    $status_info = M('devices_statu')->where(['DeviceID'=>$data['dcode']])->save(['ReFlow'=>0,'Reday'=>0,'LeasingMode'=>$data['lease']
 //                    ,'FilterMode'=>$data['filter'],'SumFlow'=>0,'SumDay'=>0,'AliveStause'=>1,'updatetime'=>time()]);
+
                     $statu['DeviceID'] = $data['dcode'];
                     $statu['PackType'] = 'SetData';
 //                    $statu['ReFlow'] = 0;
@@ -191,7 +202,7 @@ class PersonnelController extends Controller
                     $statu['AliveStause'] = 1;
                     $statu['FilerNum'] = count($res);
                     $message['PackNum'] = 6;//激活
-                    $sc = A('Api/Action');
+                    // $sc = A('Api/Action');
 //                    $status = $sc->Initialize($data['dcode']);
 //                    $sta = Gateway::sendToUid('868575025659121',$status);
 //                    if ($status) {

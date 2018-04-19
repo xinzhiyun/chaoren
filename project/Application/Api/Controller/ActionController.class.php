@@ -14,6 +14,7 @@ class ActionController extends Controller
 
     public function test()
     {
+        dump($this->get_filter_info('868575025673213'));
         // $this->devices_init('868575025673882');
 //
 //        $message['DeviceID'] = '868575025672249';
@@ -422,8 +423,11 @@ class ActionController extends Controller
 //        $status = M('devices_statu')->where("DeviceID='{$dcode}'")->find();
         $type = M('device_type')->where("id={$code['type_id']}")->find();
 
-        unset($type['id'], $type['typename'], $type['addtime']);
-        $sum = array_filter($type);
+        foreach ($type as $k=> $v) {
+            if(strstr($k,'filter') and !empty($v) ){
+                $sum[$k] = $v;
+            }
+        }
         foreach ($sum as $key => $value) {
             $str = stripos($value,'-');
             $map['filtername'] = substr($value, 0,$str);
@@ -431,6 +435,7 @@ class ActionController extends Controller
 //            $res[] = M('filters')->where($map)->field('timelife,flowlife')->find();
             $res[] = M('filters')->where($map)->field('timelife,flowlife')->find();
         }
+        array_filter($res);
         return $res;
     }
 

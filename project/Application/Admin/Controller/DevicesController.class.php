@@ -110,11 +110,12 @@ class DevicesController extends CommonController
                 'devicestause' => ['制水','冲洗','水满','缺水','漏水','检修','欠费停机','关机','开机'],
                 'netstause'=>['断开','连接中'],
                 'filtermode' => ['按时长','按流量','时长和流量'],
-                'updatetime'=>['date','Y-m-d H:i:s']               
+                'updatetime'=>['date','Y-m-d H:i:s'],
+                'bindtime'=>['date','Y-m-d H:i:s'],
             ];
 
             $data = replace_array_value($data,$arr);
-            
+
             $filename = '设备列表数据';
             $title = '设备列表';
             $cellName = ['编号','设备编号','经销商名称','ICCID','绑定的用户','电话','地址','计费模式','剩余天数','剩余流量','工作状态','网络状态','滤芯模式','绑定时间','设备类型(滤芯)','最近更新时间'];

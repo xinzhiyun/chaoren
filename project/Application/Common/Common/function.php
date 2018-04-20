@@ -70,6 +70,7 @@ function show($data)
   }else{
     dump($data);
   }
+  exit;
 }
 
 /**

@@ -73,7 +73,7 @@ class DevicesModel extends Model
             ->join("__DEVICE_TYPE__ type ON d.type_id=type.id", 'LEFT')
             ->join('__USERS__ u ON u.id=d.uid', 'LEFT')
             // ->field("statu.*,bind.*,d.device_code,type.*,vendors.*,d.name dname,d.phone,d.address,d.id,d.uid,u.open_id")
-            ->field("statu.iccid,statu.reday,statu.reflow,statu.devicestause,statu.leasingmode,statu.filtermode,statu.alivestause,statu.netstause,bind.*,d.device_code,type.*,vendors.*,d.name dname,d.phone,d.address,d.id,d.uid,u.open_id")
+            ->field("statu.iccid,statu.reday,statu.reflow,statu.devicestause,statu.leasingmode,statu.filtermode,statu.alivestause,statu.netstause,bind.*,d.device_code,type.*,vendors.*,d.name dname,d.phone,d.bindtime,statu.updatetime,d.address,d.id,d.uid,u.open_id")
             ->order('d.id asc')
             ->limit($page->firstRow.','.$page->listRows)
             ->select();

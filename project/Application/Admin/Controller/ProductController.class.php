@@ -37,7 +37,7 @@ class ProductController extends CommonController
         $type = M('device_type');
         // PHPExcel 导出数据 
         if (I('output') == 1) {
-            $data = $type->where($map)->select();
+            $data = $type->where($map)->order('addtime desc')->select();
             $arr = ['addtime'=>'Y-m-d H:i:s'];
             replace_value($data,$arr);
             $filename = '产品类型列表数据';

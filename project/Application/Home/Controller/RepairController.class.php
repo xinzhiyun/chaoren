@@ -1,7 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-
+use \Org\Util\WeixinJssdk;
 /**
  * 客户报修控制器
  * 
@@ -20,7 +20,8 @@ class RepairController extends CommonController
         $device_code = M('devices')->where($id)->find();
         if (IS_POST) {
             // 先处理图片
-            $picpath = $this->upload();
+//            $picpath = $this->upload();
+            $picpath = $this->downloadPic($_POST['pic']);
             if ($picpath) {
                 // 接收用户输入数据
                 $repair = D('repair');
@@ -54,6 +55,11 @@ class RepairController extends CommonController
                 $this->error('一不小心服务器偷懒了~');
             }
         }else{
+            $weixin = new WeixinJssdk;
+            $signPackage = $weixin->getSignPackage();
+
+            $this->assign('info',$signPackage);
+
             // 查出该用户昵称和地址等信息显示在页面
             $vid = M('binding')->where('did='.$_SESSION['homeuser']['did'])->field('vid')->find()['vid'];
             $phone=M('vendors')->where('id='.$vid)->field('phone,csphone')->find();
@@ -85,6 +91,42 @@ class RepairController extends CommonController
             // $this->success('上传成功！');
             return $pic;
         }
+    }
+
+    //下载图片
+    public function downloadPic($paths='')
+    {
+
+        $path_info = '/Pic/repair/'.date('Y-m-d',time());
+
+        $file=md5($paths).".jpg";
+
+
+        $dir =rtrim(THINK_PATH,"ThinkPHP/").'/Public'.$path_info;
+        if(!is_dir($dir)){
+            mkdir($dir,0777,true);
+        }
+        $path_info = $path_info.'/'.$file;
+
+        $path = './Public'.$path_info;
+
+        $weixin = new WeixinJssdk;
+        $ACCESS_TOKEN = $weixin->getAccessToken();
+
+        $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=$ACCESS_TOKEN&media_id=$paths";
+        // $url = "http://img.taopic.com/uploads/allimg/140729/240450-140HZP45790.jpg";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        $file = curl_exec($ch);
+        curl_close($ch);
+
+        $resource = fopen($path, 'a');
+        fwrite($resource, $file);
+        fclose($resource);
+        return $path_info;
+
     }
 
     

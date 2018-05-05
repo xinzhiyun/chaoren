@@ -323,19 +323,29 @@
 		//页面加载时执行
 		$(function(){
 			// 获取微信JSSDK所需的数据
-			var appId = $("#appId").val(),
-				nonceStr = $("#nonceStr").val(),
-				signature = $("#signature").val(),
-				timestamp = $("#timestamp").val();
+			// var appId = $("#appId").val(),
+			// 	nonceStr = $("#nonceStr").val(),
+			// 	signature = $("#signature").val(),
+			// 	timestamp = $("#timestamp").val();
+
+			var appId = {{$_SESSION['weixin'][1]['appId']|json_encode}},
+				nonceStr = {{$_SESSION['weixin'][1]['nonceStr']|json_encode}},
+				signature = {{$_SESSION['weixin'][1]['signature']|json_encode}},
+				timestamp = {{$_SESSION['weixin'][1]['timestamp']|json_encode}};
+
+			//变量定义
+			var data=JSON.parse({{$status|json_encode}});
+			var res=JSON.parse({{$res|json_encode}});
+			var deviceInfo=JSON.parse({{$deviceInfo|json_encode}});
 
 			// 调用微信分享
 			//wxShare(appId,nonceStr,signature,timestamp);
 			// console.log(appId,nonceStr,signature,timestamp)
 			
-			//变量定义
-			var data=JSON.parse($(".status").val());
-			var res=JSON.parse($('.res').val());
-			var deviceInfo=JSON.parse($(".deviceInfo").val());
+			// //变量定义
+			// var data=JSON.parse($(".status").val());
+			// var res=JSON.parse($('.res').val());
+			// var deviceInfo=JSON.parse($(".deviceInfo").val());
 			var deviceId=data.deviceid;//设备id
 			sessionStorage.setItem("deviceId",deviceId);//设备编号设置本地存储
 			// var deviceId=162753445596778;//设备id

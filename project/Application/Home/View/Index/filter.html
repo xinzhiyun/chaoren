@@ -49,10 +49,14 @@
 <link rel="stylesheet" href="__PUBLIC__/Admin/layui/css/layui.css" />
 <script src="__PUBLIC__/Home/js/flexible.js"></script>
 <script type="text/javascript">
-//变量定义
-var data=JSON.parse($(".status").val());
+// //变量定义
+// var data=JSON.parse($(".status").val());
+// var res=JSON.parse($('.res').val());
 
-var res=JSON.parse($('.res').val());
+//变量定义
+var data=JSON.parse({{$status|json_encode}});
+var res=JSON.parse({{$res|json_encode}});
+
 console.log(data);
 console.log(res);
 var deviceId=data.deviceid;//设备id
